@@ -1,10 +1,15 @@
 body {
     background-color: #00061a;
     color: white;
+    font-family: 'Ubuntu', sans-serif;
 
 }
 
 h1 {
+    text-align: left;
+}
+
+#title {
     text-align: center;
     font-size: 3rem;
 }
@@ -12,5 +17,34 @@ h1 {
 #side-nav {
     height: 100%;
     width: 280px;
+    position: absolute;
+    margin-top: 98px;
     
+}
+
+#side-nav ul li ul a {
+    //padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    //font-size: 20px;
+    color: #bebebe;
+    display: block;
+    border: none;
+    background: none;
+    width:100%;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+}
+
+#side-nav ul li ul a:hover {
+    color: #f1f1f1;
+}
+
+#content {
+    position: absolute;
+    margin-left: 380px;
+    height: auto;
+    width: 800px;
+    margin-top: 94px;
+    font-size: 16px;
 }
