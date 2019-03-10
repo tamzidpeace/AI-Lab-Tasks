@@ -1,0 +1,16 @@
+body {
+    background-color: #00061a;
+    color: white;
+
+}
+
+h1 {
+    text-align: center;
+    font-size: 3rem;
+}
+
+#side-nav {
+    height: 100%;
+    width: 280px;
+    
+}
