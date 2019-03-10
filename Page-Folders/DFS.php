@@ -1,6 +1,5 @@
 <h1>DFS</h1>
 
-<div style="">
 <pre>
     <code>
 
@@ -83,4 +82,3 @@ class Graph
 
     </code>
 </pre>
-</div>
