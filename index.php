@@ -37,9 +37,9 @@
             <h2>Assignments Type - II</h2>
             <ul style="list-style-type:square">
                 <li><a href="index.php?PageName=BFS"><h3>Form</h3></a></li>
-                <li><a href="index.php?PageName=DFS"><h3>Vacuum Cleaner</h3></a></li>
+                <li><a href="index.php?PageName=VACUUM-CLEANER"><h3>Vacuum Cleaner</h3></a></li>
                 <li><a href=""><h3>Save The Queen</h3></a></li>
-                <li><a href=""><h3>Boy/Girl Detection</h3></a></li>
+                <li><a href="index.php?PageName=BOY-GIRL"><h3>Boy/Girl Detection</h3></a></li>
             </ul>
         </li>
 
