@@ -85,9 +85,12 @@ class Graph
 	}
 }
 
-
-// This code is contributed by Aakash Hasija
-// credits : Geeks for Geeks
+<p class="credit bfs">Credits goes to geeks for geeks</p>
+<!--// This code is contributed by Aakash Hasija
+// credits : Geeks for Geeks-->
 
     </code>
 </pre>
+
+<!-- js -->
+<script rel="js" src="js/index.js"></script>
