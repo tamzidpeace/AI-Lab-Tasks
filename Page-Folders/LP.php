@@ -4,14 +4,12 @@
 
     <code>
 
+// The simplex method is a method for solving problems in linear programming.
+// Example: Maximize 3x + 5y Subject to	x + y <= 4 x + 3y <= 6 For all x and y greater than 0
+
 // The Following solves a linear programming problem
 // In standardized form using the simplex method
-// Please the read below.
-/************************************************USAGE*************************************************************
- * 1.Create an instance of the simplex class
- * 2.Fill in the table with the standardized form of the problem by calling simplex.fillTable()
- * 3.Create a while loop and call the simplex.compute() method until it returns ERROR.IS_OPTIMAL or ERROR.UNBOUNDED
- * ****************************************************************************************************************/
+
 
 public class Simplex {
     private int rows, cols; // row and column
@@ -230,8 +228,12 @@ public class Simplex {
 }
 
 
-// The simplex method is a method for solving problems in linear programming.
-// Example: Maximize 3x + 5y Subject to	x + y <= 4 x + 3y <= 6 For all x and y greater than 0
+/************************************************USAGE*************************************************************
+ * 1.Create an instance of the simplex class
+ * 2.Fill in the table with the standardized form of the problem by calling simplex.fillTable()
+ * 3.Create a while loop and call the simplex.compute() method until it returns ERROR.IS_OPTIMAL or ERROR.UNBOUNDED
+ * ****************************************************************************************************************/
+
     </code>
 
 </pre>

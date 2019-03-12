@@ -13,7 +13,7 @@
 <body>
 
 <div>
-    <h1 id="title">Artificial Intelligence LAB TASKS</h1>
+    <h1 id="title">Artificial Intelligence Lab Tasks</h1>
 </div>
 
 
