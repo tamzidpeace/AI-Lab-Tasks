@@ -29,7 +29,7 @@
                 <li><a href="index.php?PageName=BS"><h3>Bidirectional Search</h3></a></li>
                 <li><a href="index.php?PageName=GBFS"><h3>Greedy Best First</h3></a></li>
                 <li><a href="index.php?PageName=ASTAR"><h3>A* Search</h3></a></li>
-                <li><a href="index.php?PageName=LP"><h3>Linear Programming</h3></a></li>
+                <li><a href="index.php?PageName=LP"><h3>Min-Max</h3></a></li>
             </ul>
         </li>
 

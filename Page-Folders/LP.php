@@ -1,238 +1,176 @@
-<h1>Linear Programming</h1>
+<h1>Min-Max with Tic-Tac-Toe</h1>
 
 <pre>
 
     <code>
 
-// The simplex method is a method for solving problems in linear programming.
-// Example: Maximize 3x + 5y Subject to	x + y <= 4 x + 3y <= 6 For all x and y greater than 0
+// this algorithm has implemented with tic tac toe game
+// full explanation is here : https://tutorialedge.net/artificial-intelligence/min-max-algorithm-in-java/
 
-// The Following solves a linear programming problem
-// In standardized form using the simplex method
+<h3>Gist <a href="https://gist.github.com/tamzidpeace/5f6c1577834f1e7865f3a0cd98805cc0"
+       target="_blank" style="color: #17A2B8">Link</a></h3>
+
+package MIN_MAX;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 
-public class Simplex {
-    private int rows, cols; // row and column
-    private float[][] table; // simplex tableau
-    private boolean solutionIsUnbounded = false;
+public class Point {
 
-    public static enum ERROR{
-        NOT_OPTIMAL,
-        IS_OPTIMAL,
-        UNBOUNDED
-    };
+    int x, y;
 
-    public Simplex(int numOfConstraints, int numOfUnknowns){
-        rows = numOfConstraints+1; // row number + 1
-        cols = numOfUnknowns+1;   // column number + 1
-        table = new float[rows][]; // create a 2d array
-
-        // initialize references to arrays
-        for(int i = 0; i < rows; i++){
-            table[i] = new float[cols];
-        }
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
-    // prints out the simplex tableau
-    public void print(){
-        for(int i = 0; i < rows; i++){
-            for(int j = 0; j < cols; j++){
-                String value = String.format("%.2f", table[i][j]);
-                System.out.print(value + "\t");
-            }
-            System.out.println();
-        }
-        System.out.println();
+    @Override
+    public String toString() {
+        return "[" + x + ", " + y + "]";
     }
+}
 
-    // fills the simplex tableau with coefficients
-    public void fillTable(float[][] data){
-        for(int i = 0; i < table.length; i++){
-            System.arraycopy(data[i], 0, this.table[i], 0, data[i].length);
-        }
-    }
+class PointAndScore {
 
-    // computes the values of the simplex tableau
-    // should be use in a loop to continously compute until
-    // an optimal solution is found
-    public ERROR compute(){
-        // step 1
-        if(checkOptimality()){
-            return ERROR.IS_OPTIMAL; // solution is optimal
-        }
+    int score;
+    Point point;
 
-        // step 2
-        // find the entering column
-        int pivotColumn = findEnteringColumn();
-        System.out.println("Pivot Column: "+pivotColumn);
-
-        // step 3
-        // find departing value
-        float[] ratios = calculateRatios(pivotColumn);
-        if(solutionIsUnbounded == true)
-            return ERROR.UNBOUNDED;
-        int pivotRow = findSmallestValue(ratios);
-        //System.out.println("Pivot row: "+ pivotRow);
-
-        // step 4
-        // form the next tableau
-        formNextTableau(pivotRow, pivotColumn);
-
-        // since we formed a new table so return NOT_OPTIMAL
-        return ERROR.NOT_OPTIMAL;
-    }
-
-    // Forms a new tableau from precomuted values.
-    private void formNextTableau(int pivotRow, int pivotColumn){
-        float pivotValue = table[pivotRow][pivotColumn];
-        float[] pivotRowVals = new float[cols];
-        float[] pivotColumnVals = new float[cols];
-        float[] rowNew = new float[cols];
-
-        // divide all entries in pivot row by entry inpivot column
-        // get entry in pivot row
-        System.arraycopy(table[pivotRow], 0, pivotRowVals, 0, cols);
-
-        // get entry inpivot colum
-        for(int i = 0; i < rows; i++)
-            pivotColumnVals[i] = table[i][pivotColumn];
-
-        // divide values in pivot row by pivot value
-        for(int  i = 0; i < cols; i++)
-            rowNew[i] =  pivotRowVals[i] / pivotValue;
-
-        // subtract from each of the other rows
-        for(int i = 0; i < rows; i++){
-            if(i != pivotRow){
-                for(int j = 0; j < cols; j++){
-                    float c = pivotColumnVals[i];
-                    table[i][j] = table[i][j] - (c * rowNew[j]);
-                }
-            }
-        }
-
-        // replace the row
-        System.arraycopy(rowNew, 0, table[pivotRow], 0, rowNew.length);
-    }
-
-    // calculates the pivot row ratios
-    private float[] calculateRatios(int column){
-        float[] positiveEntries = new float[rows];
-        float[] res = new float[rows];
-        int allNegativeCount = 0;
-        for(int i = 0; i < rows; i++){
-            if(table[i][column] > 0){
-                positiveEntries[i] = table[i][column];
-            }
-            else{
-                positiveEntries[i] = 0;
-                allNegativeCount++;
-            }
-            //System.out.println(positiveEntries[i]);
-        }
-
-        if(allNegativeCount == rows)
-            this.solutionIsUnbounded = true;
-        else{
-            for(int i = 0;  i < rows; i++){
-                float val = positiveEntries[i];
-                if(val > 0){
-                    res[i] = table[i][cols -1] / val;
-                }
-            }
-        }
-
-        return res;
-    }
-
-    // finds the next entering column
-    private int findEnteringColumn(){
-        float[] values = new float[cols];
-        int location = 0;
-
-        int pos, count = 0;
-        for(pos = 0; pos < cols-1; pos++){
-            if(table[rows-1][pos] < 0){
-                //System.out.println("negative value found");
-                count++;
-            }
-        }
-
-        if(count > 1){
-            for(int i = 0; i < cols-1; i++)
-                values[i] = Math.abs(table[rows-1][i]);
-            location = findLargestValue(values);
-        } else location = count - 1;
-
-        return location;
-    }
-
-
-    // finds the smallest value in an array
-    private int findSmallestValue(float[] data){
-        float minimum ;
-        int c, location = 0;
-        minimum = data[0];
-
-        for(c = 1; c < data.length; c++){
-            if(data[c] > 0){
-                if(Float.compare(data[c], minimum) < 0){
-                    minimum = data[c];
-                    location  = c;
-                }
-            }
-        }
-
-        return location;
-    }
-
-    // finds the largest value in an array
-    private int findLargestValue(float[] data){
-        float maximum = 0;
-        int c, location = 0;
-        maximum = data[0];
-
-        for(c = 1; c < data.length; c++){
-            if(Float.compare(data[c], maximum) > 0){
-                maximum = data[c];
-                location  = c;
-            }
-        }
-
-        return location;
-    }
-
-    // checks if the table is optimal
-    public boolean checkOptimality(){
-        boolean isOptimal = false;
-        int vCount = 0;
-
-        for(int i = 0; i < cols-1; i++){
-            float val = table[rows-1][i];
-            if(val >= 0){
-                vCount++;
-            }
-        }
-
-        if(vCount == cols-1){
-            isOptimal = true;
-        }
-
-        return isOptimal;
-    }
-
-    // returns the simplex tableau
-    public float[][] getTable() {
-        return table;
+    PointAndScore(int score, Point point) {
+        this.score = score;
+        this.point = point;
     }
 }
 
 
-/************************************************USAGE*************************************************************
- * 1.Create an instance of the simplex class
- * 2.Fill in the table with the standardized form of the problem by calling simplex.fillTable()
- * 3.Create a while loop and call the simplex.compute() method until it returns ERROR.IS_OPTIMAL or ERROR.UNBOUNDED
- * ****************************************************************************************************************/
+class Board {
+
+    List<Point> availablePoints;
+    Scanner scan = new Scanner(System.in);
+    int[][] board = new int[3][3];
+
+    public static void main(String[] args) {
+        //takeHumanInput();
+    }
+
+    public Board() {
+    }
+
+    public boolean isGameOver() {
+        return (hasXWon() || hasOWon() || getAvailableStates().isEmpty());
+    }
+
+    public boolean hasXWon() {
+        if ((board[0][0] == board[1][1] && board[0][0] == board[2][2] && board[0][0] == 1) ||
+                (board[0][2] == board[1][1] && board[0][2] == board[2][0] && board[0][2] == 1)) {
+            return true;
+        }
+        for (int i = 0; i < 3; ++i) {
+            if (((board[i][0] == board[i][1] && board[i][0] == board[i][2] && board[i][0] == 1)
+                    || (board[0][i] == board[1][i] && board[0][i] == board[2][i] && board[0][i] == 1))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasOWon() {
+        if ((board[0][0] == board[1][1] && board[0][0] == board[2][2] && board[0][0] == 2) ||
+                (board[0][2] == board[1][1] && board[0][2] == board[2][0] && board[0][2] == 2)) {
+            return true;
+        }
+        for (int i = 0; i < 3; ++i) {
+            if ((board[i][0] == board[i][1] && board[i][0] == board[i][2] && board[i][0] == 2)
+                    || (board[0][i] == board[1][i] && board[0][i] == board[2][i] && board[0][i] == 2)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public List<Point> getAvailableStates() {
+        availablePoints = new ArrayList<>();
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                if (board[i][j] == 0) {
+                    availablePoints.add(new Point(i, j));
+                }
+            }
+        }
+        return availablePoints;
+    }
+
+    public void placeAMove(Point point, int player) {
+        board[point.x][point.y] = player; //player = 1 for X, 2 for O
+    }
+
+     void takeHumanInput() {
+        System.out.println("Your move: ");
+        int x = scan.nextInt();
+        int y = scan.nextInt();
+        Point point = new Point(x, y);
+        placeAMove(point, 2);
+    }
+
+    public void displayBoard() {
+        System.out.println();
+
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+
+        }
+    }
+
+    Point computersMove;
+
+    public int minimax(int depth, int turn) {
+        if (hasXWon()) return +1;
+        if (hasOWon()) return -1;
+
+        List<Point> pointsAvailable = getAvailableStates();
+        if (pointsAvailable.isEmpty()) return 0;
+
+        int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+
+        for (int i = 0; i < pointsAvailable.size(); ++i) {
+            Point point = pointsAvailable.get(i);
+            if (turn == 1) {
+                placeAMove(point, 1);
+                int currentScore = minimax(depth + 1, 2);
+                max = Math.max(currentScore, max);
+
+                if (depth == 0) System.out.println("Score for position " + (i + 1) + " = " + currentScore);
+                if (currentScore >= 0) {
+                    if (depth == 0) computersMove = point;
+                }
+                if (currentScore == 1) {
+                    board[point.x][point.y] = 0;
+                    break;
+                }
+                if (i == pointsAvailable.size() - 1 && max < 0) {
+                    if (depth == 0) computersMove = point;
+                }
+            } else if (turn == 2) {
+                placeAMove(point, 2);
+                int currentScore = minimax(depth + 1, 1);
+                min = Math.min(currentScore, min);
+                if (min == -1) {
+                    board[point.x][point.y] = 0;
+                    break;
+                }
+            }
+            board[point.x][point.y] = 0; //Reset this point
+        }
+        return turn == 1 ? max : min;
+    }
+
+
+}
 
     </code>
 
